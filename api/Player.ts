@@ -71,7 +71,7 @@ export default class Player {
      * Removes tail block from body (assuming no food has been encountered)
      */
     removeTail() {
-        this.body = this.body.slice(1);
+        this.body.shift();
     }
 
     /**

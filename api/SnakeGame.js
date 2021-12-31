@@ -19,20 +19,20 @@ export default class SnakeGame {
         return foodLocation;
     }
     _gameLoop() {
-        var gameState;
+        var newPlayers = [];
         for (let player of this.players) {
             let playerState = player.nextState();
             player.removeTail();
-            this.gameState.players.push(playerState);
+            newPlayers.push(playerState);
         }
+        this.gameState.players = newPlayers;
         for (let player of this.players) {
-            player.broadcastState(gameState);
+            player.broadcastState(this.gameState);
         }
     }
     addPlayer(playerSocket) {
         var newPlayer = new Player(playerSocket, [{ x: 0, y: 0 }, { x: 0, y: 1 }], { x: 0, y: 1 }, this.xLimit, this.yLimit);
         this.players.push(newPlayer);
-        this.gameState.players.push(newPlayer.body);
     }
     start() {
         if (this.gameInterval == undefined) {
@@ -40,7 +40,6 @@ export default class SnakeGame {
         }
     }
     stop() {
-        console.log(this.gameInterval);
         if (this.gameInterval !== undefined) {
             clearInterval(this.gameInterval);
             this.gameInterval = undefined;

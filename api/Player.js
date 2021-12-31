@@ -45,7 +45,7 @@ export default class Player {
         return this.body;
     }
     removeTail() {
-        this.body = this.body.slice(1);
+        this.body.shift();
     }
     broadcastState(currentState) {
         this.socket.emit(SocketCommand.GAME_STATE, currentState);

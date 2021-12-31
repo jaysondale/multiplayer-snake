@@ -36,27 +36,27 @@ export default class SnakeGame {
     }
 
     private _gameLoop() {
-        var gameState: GameState;
+        var newPlayers = [];
         for (let player of this.players) {
             let playerState = player.nextState();
 
             // TODO: Check food collision
             player.removeTail();
-            this.gameState.players.push(playerState);
+            newPlayers.push(playerState);
         }
+        this.gameState.players = newPlayers;
 
         // TODO: Check collision with other player
 
         // Update clients with latest game state
         for (let player of this.players) {
-            player.broadcastState(gameState);
+            player.broadcastState(this.gameState);
         }
     }
 
     addPlayer(playerSocket: Socket) {
         var newPlayer = new Player(playerSocket, [{x: 0, y: 0}, {x: 0, y: 1}], {x: 0, y: 1}, this.xLimit, this.yLimit);
         this.players.push(newPlayer);
-        this.gameState.players.push(newPlayer.body);
     }
 
     start() {

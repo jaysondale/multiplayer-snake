@@ -13,17 +13,16 @@ class Game extends React.Component {
     componentDidMount() {
         const socket = this.context;
         socket.on('GAME STATE', msg => {
-            console.log(msg);
+            console.log(msg.players);
             this.setState({
                 gameFrame: msg
             });
         });
-        socket.emit('MSG', "It's working!");
     }
 
     render() {
         return (
-            <h1>{this.state.gameFrame}</h1>
+            <h1>Client</h1>
         )
     }
 }
