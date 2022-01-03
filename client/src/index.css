@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.game-block {
+  height: 20px;
+  width: 20px;
+  position: absolute;
+}
+
+.snake-block {
+  background-color: aquamarine;
+}
+
+.food-block {
+  background-color: lightpink;
+}

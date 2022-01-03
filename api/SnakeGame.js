@@ -10,6 +10,7 @@ export default class SnakeGame {
         };
         this.gameDelay = gameDelay;
         this._gameLoop = this._gameLoop.bind(this);
+        this._checkFoodCollision = this._checkFoodCollision.bind(this);
     }
     _generateFoodLocation() {
         var foodLocation = {
@@ -18,11 +19,23 @@ export default class SnakeGame {
         };
         return foodLocation;
     }
+    _checkFoodCollision(player) {
+        let head = player.body[player.body.length - 1];
+        if (head.x == this.gameState.foodLocation.x && head.y == this.gameState.foodLocation.y) {
+            return true;
+        }
+        return false;
+    }
     _gameLoop() {
         var newPlayers = [];
         for (let player of this.players) {
             let playerState = player.nextState();
-            player.removeTail();
+            if (!this._checkFoodCollision(player)) {
+                player.removeTail();
+            }
+            else {
+                this.gameState.foodLocation = this._generateFoodLocation();
+            }
             newPlayers.push(playerState);
         }
         this.gameState.players = newPlayers;
@@ -31,7 +44,7 @@ export default class SnakeGame {
         }
     }
     addPlayer(playerSocket) {
-        var newPlayer = new Player(playerSocket, [{ x: 0, y: 0 }, { x: 0, y: 1 }], { x: 0, y: 1 }, this.xLimit, this.yLimit);
+        var newPlayer = new Player(playerSocket, [{ x: this.players.length, y: 0 }, { x: this.players.length, y: 1 }], { x: 0, y: 1 }, this.xLimit, this.yLimit);
         this.players.push(newPlayer);
     }
     start() {
@@ -43,6 +56,7 @@ export default class SnakeGame {
         if (this.gameInterval !== undefined) {
             clearInterval(this.gameInterval);
             this.gameInterval = undefined;
+            this.players = [];
             console.log('Game Stopped');
         }
     }

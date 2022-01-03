@@ -5,12 +5,12 @@ import http from "http";
 const server = http.createServer(app);
 import { Server } from "socket.io";
 const io = new Server(server, {cors: {
-    origin: "http://localhost:3000",
+    origin: "http://10.0.0.42:3000",
 }});
 
 var connectedSockets = 0;
 
-var gameInstance = new SnakeGame(50, 50, 10);
+var gameInstance = new SnakeGame(50, 50, 50);
 
 app.get('/', (req, res) => {
     res.send('Homepage');
@@ -19,6 +19,7 @@ app.get('/', (req, res) => {
 io.on('connection', socket => {
     connectedSockets++;
     gameInstance.addPlayer(socket);
+    console.log('Client Connected!');
     socket.on('disconnect', _ => {
         console.log('Client disconnected. Stopping game');
         gameInstance.stop();
